@@ -68,13 +68,14 @@
         </template>
         {{formatGender(page.gender)}}
       </el-descriptions-item>
+      <!--
       <el-descriptions-item>
         <template slot="label">
           <i class="el-icon-loading"></i>
           密码
         </template>
         {{page.password}}
-      </el-descriptions-item>
+      </el-descriptions-item>-->
     </el-descriptions>
   </div>
 </template>

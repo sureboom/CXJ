@@ -8,6 +8,7 @@ import com.ls.checkin.mapper.EmpStateMapper;
 import com.ls.checkin.mapper.EmployerMapper;
 import com.ls.checkin.mapper.LeftVacationMapper;
 import com.ls.checkin.service.EmployerService;
+import com.ls.checkin.util.PasswordUtil;
 import com.ls.checkin.vo.QueryEmpInfoResp;
 import com.ls.checkin.vo.QueryEmpStateResp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,20 +189,31 @@ public class EmployerServiceImpl implements EmployerService {
         return empStateMapper.selectById(empId).getState();
     }
 
-        /**
- * 更新用户密码
- *
- * @param empId    员工 ID
- * @param password 新密码
- * @return 是否更新成功
- */
-    @Override
-    public Boolean updatePassword(long empId, String password) {
-        Employer employer = new Employer();
-        employer.setEmpId(empId);
-        employer.setPassword(password); // 这里可以对密码进行加密
-        int update = employerMapper.updateById(employer);
-        return update == 1;
-    }
+            /**
+     * 更新用户密码
+     *
+     * @param empId    员工 ID
+     * @param password 新密码
+     * @return 是否更新成功
+     */
+        @Override
+        public Boolean updatePassword(long empId, String password) {
+            Employer employer = new Employer();
+            employer.setEmpId(empId);
+
+            try {
+                String salt = PasswordUtil.generateSalt();
+                String HashPassword = PasswordUtil.hashPassword(password, salt);
+                employer.setSalt(salt);
+                employer.setPassword(HashPassword); // 这里可以对密码进行加密
+                int update = employerMapper.updateById(employer);
+                return update == 1;
+            } catch (Exception e) {
+                // 处理异常，例如记录日志
+                e.printStackTrace();
+                // 可以选择抛出一个更具体的异常，或者返回false表示更新失败
+                return false;
+            }
+        }
 
 }
