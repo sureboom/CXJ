@@ -18,4 +18,15 @@ npm run serve
 ## 数据库
 
 :lying_face:`db_checkin.sql` 为数据库结构及数据
-"# egg"  
+导入数据库后，运行`checkin.sql`文件即可创建数据库表及数据。
+## 接口文档
+
+:speech_balloon:`api.md` 为接口文档
+## 部署
+
+:cloud:`deploy.md` 为部署文档
+## 其他
+
+:books:`README.md` 为项目说明文档
+
+
