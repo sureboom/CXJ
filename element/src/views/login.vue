@@ -14,66 +14,51 @@
   </el-form>
 </template>
 <script>
-  export default{
-    data(){
-      return {
-       loginForm:{
-         account:'',
-         password:''
-       }
+export default {
+  data() {
+    return {
+      loginForm: {
+        account: '',
+        password: ''
       }
-    },
-    methods: {
-      submitClick: function () {
-        var _this = this;
-        if (_this.loginForm.account == ''||_this.loginForm.password == '') {
-          this.$alert('账号或密码不能为空', '提示', {
-            confirmButtonText: '确定',
+    };
+  },
+  methods: {
+    submitClick() {
+      const _this = this;
+      if (_this.loginForm.account === '' || _this.loginForm.password === '') {
+        this.$alert('账号或密码不能为空', '提示', {
+          confirmButtonText: '确定'
+        });
+      } else {
+        // 使用 POST 请求发送登录信息
+        _this.$http.post('/login', _this.loginForm).then(response => {
+          const data = response.data;
+          if (data.status === 'success') {
+            _this.$alert('登录成功', '提示', {
+              confirmButtonText: '确定'
+            });
+            // 保存用户信息到 sessionStorage
+            const userData = data.data;
+            window.sessionStorage.setItem('empId', userData.empId);
+            window.sessionStorage.setItem('account', userData.account);
+            window.sessionStorage.setItem('name', userData.name);
+            window.sessionStorage.setItem('role', userData.role);
+            // 跳转到主页
+            _this.$router.replace({ path: '/home/hello' });
+          } else {
+            _this.$alert(data.message || '登录失败', '提示', {
+              confirmButtonText: '确定'
+            });
+          }
+        }).catch(error => {
+          console.error(error);
+          _this.$alert('服务器错误，请稍后再试', '提示', {
+            confirmButtonText: '确定'
           });
-        }else{
-          _this.$http.get('/login')
-          _this.$http.get('/login/'+_this.loginForm.account+'/'+_this.loginForm.password).then(function (response) {
-            console.log(response);
-            if (response.data!='') {
-              _this.$alert('登录成功', '提示', {
-                confirmButtonText: '确定',
-              });
-              window.sessionStorage.setItem('empId',response.data.empId);
-              window.sessionStorage.setItem('account',response.data.account);
-              window.sessionStorage.setItem('name',response.data.name);
-              window.sessionStorage.setItem('role',response.data.role); 
-              _this.$router.replace({path: '/home/hello'});   
-            }else{
-              _this.$alert('账号或密码错误', '提示', {
-                confirmButtonText: '确定',
-              });
-            }
-          });
-        }
+        });
       }
     }
   }
+};
 </script>
-<style>
-  .login-container {
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 180px auto;
-    width: 350px;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-  }
-
-  .login_title {
-    margin: 0px auto 40px auto;
-    text-align: center;
-    color: #505458;
-  }
-
-  .login_remember {
-    margin: 0px 0px 35px 0px;
-    text-align: left;
-  }
-</style>

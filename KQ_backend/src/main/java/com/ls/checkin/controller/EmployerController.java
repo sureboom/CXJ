@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,43 +51,48 @@ public class EmployerController {
     public List<QueryEmpInfoResp> queryAllEmployerInfo() {
         return employerService.queryAllEmployerInfo();
     }
-
+/* 
     @ApiOperation("员工登录")
     @GetMapping("login/{account}/{password}")
     public Employer login(@PathVariable("account") String account,@PathVariable("password") String password) {
         return employerService.login(account , password);
     }
+*/
 
 
-/* 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> loginRequest) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginRequest) {
         String account = loginRequest.get("account");
         String inputPassword = loginRequest.get("password");
 
-        Employer employer = employerService.findByAccount(account);
-        if (employer == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("账号不存在");
-        }
-
+        Map<String, Object> response = new HashMap<>();
         try {
-            // 从数据库中获取盐
-            String salt = employer.getSalt();
-            // 使用输入密码和盐加密
-            String hashedPassword = PasswordUtil.hashPassword(inputPassword, salt);
+            Employer employer = employerService.login(account, inputPassword);
 
-            // 校验密码
-            if (hashedPassword.equals(employer.getPassword())) {
-                return ResponseEntity.ok("登录成功");
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("密码错误");
+            if (employer == null) {
+                response.put("status", "error");
+                response.put("message", "账号或密码错误");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
+
+            // 返回成功信息和用户数据
+            response.put("status", "success");
+            response.put("message", "登录成功");
+            response.put("data", Map.of(
+                "empId", employer.getEmpId(),
+                "account", employer.getAccount(),
+                "name", employer.getName(),
+                "role", employer.getRole()
+            ));
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("服务器错误");
+            response.put("status", "error");
+            response.put("message", "服务器错误");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-*/
+
 
 
 /* 

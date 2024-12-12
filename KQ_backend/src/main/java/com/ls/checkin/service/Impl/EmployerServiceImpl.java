@@ -117,10 +117,20 @@ public class EmployerServiceImpl implements EmployerService {
             System.out.println("没有该用户信息！");
             return null;
         }
-        if(employerList.get(0).getPassword().equals(password)){
-            return employerList.get(0);
-        }else {
-            System.out.println("密码不正确！");
+        try{
+            Employer employer = employerList.get(0);
+            String storedPassword = employer.getPassword();
+            String salt = employer.getSalt();
+        
+            // 校验输入密码是否正确
+            if (PasswordUtil.verifyPassword(password, storedPassword, salt)) {
+                return employer;
+            } else {
+                System.out.println("密码不正确！");
+                return null;
+            }
+                }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }
@@ -189,7 +199,7 @@ public class EmployerServiceImpl implements EmployerService {
         return empStateMapper.selectById(empId).getState();
     }
 
-            /**
+     /**
      * 更新用户密码
      *
      * @param empId    员工 ID
