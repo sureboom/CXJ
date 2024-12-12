@@ -1,0 +1,2 @@
+update left_vacation
+set total= left_year+left_hun_jia+left_pei_chan+left_chan_jia+left_chan_jian+left_bu_ru;
