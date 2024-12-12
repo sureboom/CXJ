@@ -55,8 +55,11 @@
       onSubmit() {
         this.employer.createTime = this.formatDate()
         console.log(this.formatDate(this.employer.createTime));
-        this.$http.post('insertEmpInfo?account='+this.employer.account+'&createTime='+this.employer.createTime+'&email='+this.employer.email+'&gender='+this.employer.gender+'&name='+this.employer.name+'&password='+this.employer.password+'&phone='+this.employer.phone+'&role='+this.employer.role).then(res => {
-          if (res.data) {
+              // 使用 POST 请求发送 JSON 数据
+          this.$http.post('insertEmpInfo', this.employer, {
+            headers: { 'Content-Type': 'application/json' } // 设置为 JSON
+          }).then(res => {
+            if (res.data) {
             this.$message({
               message: '添加成功',
               type: 'success'

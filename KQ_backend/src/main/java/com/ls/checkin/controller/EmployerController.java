@@ -50,15 +50,15 @@ public class EmployerController {
     public List<QueryEmpInfoResp> queryAllEmployerInfo() {
         return employerService.queryAllEmployerInfo();
     }
-/* 
+
     @ApiOperation("员工登录")
     @GetMapping("login/{account}/{password}")
     public Employer login(@PathVariable("account") String account,@PathVariable("password") String password) {
         return employerService.login(account , password);
     }
-*/
 
 
+/* 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Map<String, String> loginRequest) {
         String account = loginRequest.get("account");
@@ -86,14 +86,43 @@ public class EmployerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("服务器错误");
         }
     }
+*/
 
 
-
+/* 
     @ApiOperation("新增员工信息")
     @PostMapping("/insertEmpInfo")
     public boolean insertEmpInfo(Employer employer) {
         return employerService.insertEmpInfo(employer);
     }
+*/
+
+
+    @ApiOperation("新增员工信息")
+    @PostMapping("/insertEmpInfo")
+    public ResponseEntity<String> insertEmpInfo(@RequestBody Employer employer) {
+        try {
+            // 生成盐
+            String salt = PasswordUtil.generateSalt();
+            employer.setSalt(salt);
+
+            // 加密密码
+            String hashedPassword = PasswordUtil.hashPassword(employer.getPassword(), salt);
+            employer.setPassword(hashedPassword);
+
+            boolean success = employerService.insertEmpInfo(employer);
+            if (success) {
+                return ResponseEntity.ok("新增员工成功");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("新增员工失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("服务器错误");
+        }
+    }
+
+
 
     @ApiOperation("查询公司全部人员的状态")
     @GetMapping("/queryEmpState")
