@@ -152,6 +152,7 @@ public class EmployerServiceImpl implements EmployerService {
             leftVacation.setLeftChanJia(20);
             leftVacation.setLeftBuRu(30);
             leftVacation.setLeftPeiChan(5);
+            leftVacation.setTotal(68);
             leftVacation.setEmpId(employer.getEmpId());
             leftVacationMapper.insert(leftVacation);
 

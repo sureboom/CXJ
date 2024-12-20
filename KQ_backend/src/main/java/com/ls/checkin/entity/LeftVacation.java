@@ -26,4 +26,7 @@ public class LeftVacation {
 
     private Integer leftPeiChan;
 
+    //总假期时间
+    private Integer total;
+
 }

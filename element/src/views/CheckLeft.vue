@@ -1,5 +1,14 @@
 <template>
     <el-row>
+      <el-col :sm="12" :lg="6">
+    <el-result :icon="page.leftChanJia > 10 ? 'success' : 'warning'" :title='page.total + "天"' subTitle="剩余假期总时间">
+        <template slot="extra">
+        </template>
+    </el-result>
+</el-col>
+<el-col :sm="12" :lg="6" style="width: 100%;"></el-col> <!-- 空行 -->
+
+
   <el-col :sm="12" :lg="6">
     <el-result :icon="page.leftBuRu>10?'success':'warning'" :title='page.leftBuRu+"天"' subTitle="剩余哺乳假">
       <template slot="extra">

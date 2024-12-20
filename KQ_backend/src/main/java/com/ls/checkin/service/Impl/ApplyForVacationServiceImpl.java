@@ -68,6 +68,7 @@ public class ApplyForVacationServiceImpl implements ApplyForVacationService {
             leftVacation.setLeftChanJia(20);
             leftVacation.setLeftBuRu(30);
             leftVacation.setLeftPeiChan(5);
+            leftVacation.setTotal(68);
             leftVacation.setEmpId(empId);
             leftVacationMapper.insert(leftVacation);
         }
@@ -204,6 +205,9 @@ public class ApplyForVacationServiceImpl implements ApplyForVacationService {
                 System.out.println("type不合法");
                 return false;
             }
+
+            leftVacationUpdateWrapper.set("total",curLeftVacation.getTotal()-curApplierDuringTime);
+            leftVacationMapper.update(null , leftVacationUpdateWrapper);
 
             //添加员工请假记录
             ApplyRecord applyRecord = new ApplyRecord();

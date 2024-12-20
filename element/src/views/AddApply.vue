@@ -54,7 +54,7 @@
               message: '添加成功',
               type: 'success'
             });
-            this.$router.push('/blogDetail');
+            this.$router.push('/home/hello');
           } else {
             this.$message({
               message: '添加失败',
