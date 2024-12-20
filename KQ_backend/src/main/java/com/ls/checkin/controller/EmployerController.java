@@ -142,6 +142,26 @@ public class EmployerController {
         return employerService.queryEmpStateById(empId);
     }
 
-    
-
+    @ApiOperation("修改员工信息")
+    @PostMapping("/updateEmpInfo")
+    public ResponseEntity<Map<String, Object>> updateEmpInfo(@RequestBody Employer employer) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            boolean success = employerService.updateInfo(employer);
+            if (success) {
+                response.put("status", "success");
+                response.put("message", "信息更新成功");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("status", "error");
+                response.put("message", "信息更新失败");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("status", "error");
+            response.put("message", "服务器错误");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 }

@@ -3,7 +3,7 @@
       <el-col :span="10" justify="center">
         <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="E:/Code/.idea/"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
@@ -29,43 +29,59 @@
   
   <script>
   export default {
-    data() {
+        data() {
       return {
         employer: {
           phone: '',
           email: '',
-          imageUrl: ''
-        }
-      }
+          imageUrl: '',
+        },
+        avatarFile: null, // 初始化头像文件
+      };
     },
     methods: {
-      onUpdate() {
-        this.$http.post('updateEmpInfo?account='+this.employer.account+'&phone='+this.employer.phone+'&email='+this.employer.email)
-          .then(res => {
-            if (res.data) {
-              this.$message({
-                message: '信息修改成功',
-                type: 'success'
-              });
-              this.resetForm();
-            } else {
-              this.$message({
-                message: '信息修改失败',
-                type: 'error'
-              });
-            }
+      async onUpdate() {
+        const formData = new FormData();
+        formData.append('phone', this.employer.phone);
+        formData.append('email', this.employer.email);
+        if (this.avatarFile) {
+          formData.append('avatar', this.avatarFile);
+        }
+
+        try {
+          const res = await this.$http.post('updateEmpInfo', formData);
+
+          if (res.data.success) {
+            this.$message({
+              message: '信息修改成功',
+              type: 'success',
+            });
+            this.resetForm();
+          } else {
+            this.$message({
+              message: '信息修改失败',
+              type: 'error',
+            });
+          }
+        } catch (error) {
+          this.$message({
+            message: '更新过程中发生错误',
+            type: 'error',
           });
+        }
       },
       resetForm() {
-        this.employer = { phone: '', email: '' };
+        this.employer = { phone: '', email: '', imageUrl: '' };
+        this.avatarFile = null;
       },
       handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
+        this.avatarFile = file.raw; // 保存文件对象，用于上传
+        this.employer.imageUrl = URL.createObjectURL(file.raw); // 修正绑定
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
-  
+
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG 格式!');
         }
@@ -73,8 +89,10 @@
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
         return isJPG && isLt2M;
-      }
-    }
+      },
+    },
+
+
   }
   </script>
   

@@ -70,5 +70,13 @@ public interface EmployerService {
     Boolean updatePassword(long empId,String password);
 
 
+    /**
+     * 更新员工信息（手机号、邮箱、头像）
+     *
+     * @param employer 更新后的员工对象
+     * @return 是否更新成功
+     */
+    boolean updateInfo(Employer employer);
+
 
 }
