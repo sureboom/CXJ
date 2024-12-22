@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CheckinApplication",
+            "request": "launch",
+            "mainClass": "com.ls.checkin.CheckinApplication",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "SecurityTest",
             "request": "launch",
             "mainClass": "com.ls.checkin.SecurityTest",
