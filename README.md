@@ -11,7 +11,7 @@ npm run serve
 
 ## 后端
 
-:drooling_face:`KQ_backend` 为后端项目
+:drooling_face:`KaoQin` 为后端项目
 
 在`application.yaml`中修改启动端口及数据库相关信息后，直接启动即可。
 
