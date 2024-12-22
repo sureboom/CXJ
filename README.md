@@ -16,12 +16,9 @@ npm run serve
 在`application.yaml`中修改启动端口及数据库相关信息后，直接启动即可。
 
 ## 数据库
-
+:cloud:
 运行`checkin.sql`文件即可创建数据库表及数据。
-## 接口文档
 
-
-:cloud:`deploy.md` 为部署文档
 ## 其他
 
 :books:`README.md` 为项目说明文档
